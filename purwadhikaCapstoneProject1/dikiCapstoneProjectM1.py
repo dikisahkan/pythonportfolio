@@ -230,7 +230,7 @@ def showMessages(tipe) :
     elif tipe == 10 :
         print('\nNIK belum ada!\n')
     elif tipe == 11 :
-        print('\nFormat email harus diakhiri "@karyawan.com"\n')
+        print('\nFormat email harus berisi username (hanya dengan pemisah titik)\ndan berdomain "@karyawan.com"\ncontoh: "abc.de@karyawan.com"\n')
     elif tipe == 12 :
         print('\nAnda telah membatalkan penghapusan pegawai\n')
     elif tipe == 13 :
@@ -244,6 +244,8 @@ def showMessages(tipe) :
     elif tipe == 17 :
         print(f'\n{"Data tidak ditemukan":^80}\n')
     elif tipe == 18 :
+        print('\nMasukan hanya antara 1 dan 0\n')
+    elif tipe == 19 :
         print('\nProgram telah tertutup. Terimakasih\n')
 
 # FUNCTION FOR VALIDATING
@@ -299,13 +301,13 @@ def validasi(cekapa,inputnya,rangemin = None,rangemax = None) :
             showMessages(8)
             return False
     elif cekapa == 8 : # CEK FORMAT EMAIL
-        if inputnya[-13:] == '@karyawan.com' :
+        if inputnya[-13:] == '@karyawan.com' and len(inputnya) > 13 and all(i.isalpha() or i == '.' for i in inputnya[0:-13]) :
             return True
         else :
             showMessages(11)
             return False
     elif cekapa == 9 : # CEK INPUT POSISI ID
-        if len(inputnya) == 8 :
+        if len(inputnya) == 8 and inputnya.isdigit() :
             for i in posData :
                 if inputnya == i :
                     return True
@@ -323,6 +325,7 @@ def validasi(cekapa,inputnya,rangemin = None,rangemax = None) :
                 if confirmZero == 'Y' :
                     return True
                 else :
+                    showMessages(12)
                     return False
             else :
                 showMessages(3)
@@ -581,7 +584,7 @@ while True :
                 newEmail = '' # tidak generate email jika nama kosong
             else :
                 newEmail = generateEmail(newNameInput) # generate email based on name
-            updateDataEmpl(1,newKeyEmpl,newNIKempl,newNameInput,newDOBinput,newMarriedInput,newContractInput,newGradeInput,newEmail)
+            updateDataEmpl(1,newKeyEmpl,newNIKempl,newNameInput,newDOBinput,newMarriedInput,newContractInput,newGradeInput,newEmail) # proses add
             printEmpl(emplData)
             showMessages(0)
             confirmInput = backConfirm() # input konfirmasi back
@@ -632,18 +635,23 @@ while True :
                             if validasi(1,int(updateValueInput),0,1) :
                                 updateValueInput = bool(int(updateValueInput))
                             else :
+                                showMessages(18)
                                 continue
                         except ValueError :
                             showMessages(1)
+                            continue
                     elif whatToUpdateInput == 4 : # JIKA KONTRAK
                         try :
                             if validasi(1,int(updateValueInput),0,1) :
                                 updateValueInput = int(updateValueInput)
                             else :
+                                showMessages(18)
                                 continue
                         except ValueError :
                             showMessages(1)
+                            continue
                     elif whatToUpdateInput == 5 : # JIKA GRADE
+                        updateValueInput = updateValueInput.upper()
                         if validasi(7,updateValueInput) :
                             pass
                         else :
@@ -653,7 +661,7 @@ while True :
                             pass
                         else :
                             continue
-                emplDetail = list(getDetail(emplData, nikToEmplID(nikToUpdateInput)))
+                emplDetail = list(getDetail(emplData, nikToEmplID(nikToUpdateInput))) # proses update start
                 emplDetail[whatToUpdateInput] = updateValueInput
                 updateDataEmpl(0,nikToEmplID(nikToUpdateInput), emplDetail[0], emplDetail[1], emplDetail[2], emplDetail[3], emplDetail[4], emplDetail[5], emplDetail[6])
                 printEmpl(emplData)
@@ -682,18 +690,18 @@ while True :
                     break
             if delKeyInput != '0' :
                 while True :
-                    promptToDelete = input(f'Apakah anda yakin untuk menghapus pegawai dengan NIK {delKeyInput} ?\nPerubahan tidak dapat dikembalikan.\n(Y/N) :').upper()
+                    promptToDelete = input(f'Apakah anda yakin untuk menghapus pegawai dengan NIK {delKeyInput} ?\nPerubahan tidak dapat dikembalikan.\n(Y/N) :').upper() # confirm delete
                     if validasi(2,promptToDelete) :
                         if promptToDelete == '0' :
                             showMessages(3)
                             continue
                         else :
                             break
-                if promptToDelete == 'Y' :
+                if promptToDelete == 'Y' : # jika ya, delete
                     for i in posData :
                         if posData[i]['emplID'] == nikToEmplID(delKeyInput) :
-                            posData[i]['emplID'] = None
-                    del emplData[nikToEmplID(delKeyInput)]
+                            posData[i]['emplID'] = None # unassign pegawai dulu dari posisinya
+                    del emplData[nikToEmplID(delKeyInput)] # baru di delete agar tidak missing reference
                     printEmpl(emplData)
                     showMessages(0)
                 else :
@@ -728,7 +736,7 @@ while True :
                 targetPosInput = input('Masukan posisi id tujuan untuk diisi pegawai tersebut :') # Input pos ID tujuan
                 if validasi(9,targetPosInput) :
                     break
-            posDetail =  list(getDetail(posData, targetPosInput))
+            posDetail =  list(getDetail(posData, targetPosInput)) # proses assign start
             posDetail[3] = nikToEmplID(targetEmplInput)
             assignEmplPos(targetPosInput,posDetail[0],posDetail[1],posDetail[2],posDetail[3])
             showMessages(0)
@@ -747,7 +755,7 @@ while True :
                 break
         if confirmInput == 'Y' :
             clearScreenView()
-            showMessages(18)
+            showMessages(19)
             break # end of program
         else :
             clearScreenView() # back to menu
