@@ -464,7 +464,6 @@ def assignEmplPos(posID,posName,level,Divisi,emplID) :
     for i in posData :
         if posData[i]['emplID'] == emplID :
             posData[i]['emplID'] = None
-    posData[posID] = {}
     for i,k in zip(next(iter(posData.values())), updateValues) :
         posData[posID][i] = k
 
