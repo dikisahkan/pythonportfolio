@@ -11,18 +11,18 @@ This game involve 2 role of players. Game Master and Player. Game Master will de
 You can try to play it with your friends, your family, your college, even your girlfriend / boyfriend!
 
 - **Game Master**
-    1. Game master should input the secret word containing only 1 word
+    1. Game master should input the secret word containing only 1 word. 
     ![image1](screenshot/gm1.jpg)
-    2. Game master should input the max number of try-chance for player.
+    2. Game master should input the max number of try-chance for player.  
     ![image2](screenshot/gm2.jpg)
     3. Watch the player dive into confussion. :D
     
 - **Player**
-    1. Player simply write the word and press enter when done.
+    1. Player simply write the word and press enter when done.  
     ![image3](screenshot/pl1.jpg)
-    2. System will give clues based on the word the player guessed, correct word and either in right or wrong position.
+    2. System will give clues based on the word the player guessed, correct word and either in right or wrong position.  
     ![image4](screenshot/pl2.jpg)
-    3. Player should continue guessing until the max try-chance runs out or finally guessing the right word. Pay attention to the clues given: correct word, correct positon, and remaining letters.
+    3. Player should continue guessing until the max try-chance runs out or finally guessing the right word. Pay attention to the clues given: correct word, correct positon, and remaining letters.  
     ![image5](screenshot/pl3.jpg)
 
 ---
